@@ -10,7 +10,7 @@ export default function LandingPage() {
       {/* NAVBAR */}
       <nav className="w-full py-4 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-indigo-600">EduShare</h1>
+          <h1 className="text-2xl font-bold text-indigo-600">EduConnect</h1>
 
           <div className="space-x-6 hidden sm:block">
             <Link to="/resources" className="text-gray-700 hover:text-indigo-600 font-medium">Resources</Link>
@@ -30,7 +30,7 @@ export default function LandingPage() {
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
               Discover, Share, and Learn with  
-              <span className="text-indigo-600"> EduShare</span>
+              <span className="text-indigo-600"> EduConnect</span>
             </h2>
 
             <p className="mt-4 text-lg text-gray-600">
@@ -95,7 +95,7 @@ export default function LandingPage() {
 
       {/* FOOTER */}
       <footer className="py-6 text-center text-gray-600 border-t bg-gray-50">
-        © {new Date().getFullYear()} EduShare. All Rights Reserved.
+        © {new Date().getFullYear()} EduConnect. All Rights Reserved.
       </footer>
     </div>
   );
