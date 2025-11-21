@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import illustration from "./illustration.png";
+import api from "../services/api";
+import Card from "../components/Card";
 
 export default function LandingPage() {
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get("/api/resources");
+        setResources(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
@@ -53,25 +73,20 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* IMAGE / ILLUSTRATION */}
+          {/* IMAGE */}
           <div className="flex justify-center">
-            <img
-              src={illustration}
-              alt="Learning illustration"
-              className="w-4/5 max-w-md"
-            />
+            <img src={illustration} alt="Learning" className="w-4/5 max-w-md" />
           </div>
         </div>
       </header>
 
-      {/* FEATURE SECTION */}
+      {/* FEATURES */}
       <section className="bg-white py-14 border-t">
         <div className="max-w-6xl mx-auto px-6">
           <h3 className="text-3xl font-bold text-center text-gray-800">
             What You Can Do
           </h3>
 
-          {/* Features Grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             <FeatureCard
               title="Upload Learning Materials"
@@ -80,14 +95,46 @@ export default function LandingPage() {
             />
             <FeatureCard
               title="Access From Anywhere"
-              description="Students can download or view resources in seconds."
+              description="Students can download or view resources instantly."
               icon="🌍"
             />
             <FeatureCard
               title="Organized Dashboard"
-              description="Teachers get analytics, upload stats, and resource management."
+              description="Teachers get analytics, upload stats, and management tools."
               icon="📊"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* RESOURCE LIST SECTION */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <h3 className="text-3xl font-bold text-gray-800 mb-10 text-center">
+            Latest Resources
+          </h3>
+
+          {loading && <p className="text-center text-gray-600">Loading resources...</p>}
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {resources.slice(0, 6).map((r) => (
+              <Card key={r._id} className="p-6">
+                <h4 className="text-xl font-semibold">{r.title}</h4>
+                <p className="text-gray-600 mt-2 line-clamp-3">{r.description}</p>
+                <Link
+                  to={/resources/${r._id}}
+                  className="text-indigo-600 underline mt-4 inline-block"
+                >
+                  View Resource
+                </Link>
+              </Card>
+            ))}
+
+            {resources.length === 0 && !loading && (
+              <p className="text-center col-span-full text-gray-600">
+                No resources available yet.
+              </p>
+            )}
           </div>
         </div>
       </section>
