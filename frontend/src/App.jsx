@@ -15,10 +15,10 @@ export default function App(){
   return (
     <>
       <nav className="max-w-5xl mx-auto px-4">
-        <div style={{flex:1}}>
+        {/* <div style={{flex:1}}>
           <Link to="/">EduConnect</Link>
-        </div>
-        <div style={{display:'flex', gap:8}}>
+        </div> */}
+        {/* <div style={{display:'flex', gap:8}}>
           {user ? (
             <>
               <span>{user.name} ({user.role})</span>
@@ -33,7 +33,7 @@ export default function App(){
               <Toasts />
 </>
           )}
-        </div>
+        </div> */}
       </nav>
       <div className="max-w-5xl mx-auto px-4">
         <Routes>
