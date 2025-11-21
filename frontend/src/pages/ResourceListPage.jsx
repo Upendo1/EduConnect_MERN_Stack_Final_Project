@@ -160,7 +160,7 @@ export default function ResourceListPage() {
           {resources.slice(0, 6).map((r) => (
             <Link
               key={r._id}
-              to={/resource/${r._id}}
+              to={'/resource/${r._id}'}
               className="p-5 bg-white border rounded-xl shadow-sm hover:shadow-md transition"
             >
               <h4 className="font-semibold text-lg text-gray-800">{r.title}</h4>
