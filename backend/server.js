@@ -9,7 +9,7 @@ const resourceRoutes = require('./routes/resourceRoutes');
 dotenv.config();
 const app = express();
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5000',
+  origin: process.env.FRONTEND_URL || 'https://edu-connect-snowy.vercel.app',
   credentials: true,
 }));
 app.use(express.json());
