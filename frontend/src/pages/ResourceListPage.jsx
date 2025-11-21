@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import illustration from "./illustration.png";
 import api from "../services/api";
-import Card from "../components/Card";
+import toast from "react-hot-toast";
 
-export default function LandingPage() {
+export default function ResourceListPage() {
+  const { user, logout } = useAuth();
+
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  // LOAD RESOURCES
   useEffect(() => {
     const load = async () => {
       setLoading(true);
+      setError(null);
       try {
         const res = await api.get("/api/resources");
         setResources(res.data);
       } catch (err) {
-        console.error(err);
+        console.error("RESOURCE LOAD ERROR:", err);
+        setError(err);
+        toast.error("Failed to load resources");
       } finally {
         setLoading(false);
       }
@@ -29,14 +37,46 @@ export default function LandingPage() {
       {/* NAVBAR */}
       <nav className="w-full py-4 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-indigo-600">EduConnect</h1>
+          <Link to="/" className="text-2xl font-bold text-indigo-600">
+            EduConnect
+          </Link>
 
-          <div className="space-x-6 hidden sm:block">
-            <Link to="/" className="text-gray-700 hover:text-indigo-600 font-medium">Resources</Link>
-            <Link to="/login" className="text-gray-700 hover:text-indigo-600 font-medium">Login</Link>
-            <Link to="/register" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-              Get Started
+          <div className="space-x-6 hidden sm:flex">
+            <Link to="/" className="text-gray-700 hover:text-indigo-600 font-medium">
+              Resources
             </Link>
+
+            {user ? (
+              <>
+                <span className="text-gray-700 font-medium">
+                  {user.name} ({user.role})
+                </span>
+
+                <Link to="/dashboard" className="text-gray-700 hover:text-indigo-600 font-medium">
+                  Dashboard
+                </Link>
+
+                <button
+                  onClick={logout}
+                  className="px-4 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-gray-700 hover:text-indigo-600 font-medium">
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -44,16 +84,15 @@ export default function LandingPage() {
       {/* HERO SECTION */}
       <header className="flex-1 flex items-center">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 py-16">
-          
-          {/* TEXT SIDE */}
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              Discover, Share, and Learn with  
+              Discover, Share, and Learn with
               <span className="text-indigo-600"> EduConnect</span>
             </h2>
 
             <p className="mt-4 text-lg text-gray-600">
-              A simple and powerful platform where teachers upload resources and students easily access them.
+              A simple platform where teachers upload learning resources and
+              students can easily access them.
             </p>
 
             <div className="mt-6 flex gap-4">
@@ -64,16 +103,17 @@ export default function LandingPage() {
                 Browse Resources
               </Link>
 
-              <Link
-                to="/login"
-                className="px-6 py-3 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-100 font-medium"
-              >
-                Teacher Login
-              </Link>
+              {!user && (
+                <Link
+                  to="/login"
+                  className="px-6 py-3 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-100 font-medium"
+                >
+                  Teacher Login
+                </Link>
+              )}
             </div>
           </div>
 
-          {/* IMAGE */}
           <div className="flex justify-center">
             <img src={illustration} alt="Learning" className="w-4/5 max-w-md" />
           </div>
@@ -89,57 +129,50 @@ export default function LandingPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             <FeatureCard
+              icon="📤"
               title="Upload Learning Materials"
               description="Teachers can upload documents, videos, and files easily."
-              icon="📤"
             />
             <FeatureCard
-              title="Access From Anywhere"
-              description="Students can download or view resources instantly."
               icon="🌍"
+              title="Access From Anywhere"
+              description="Students can view and download resources instantly."
             />
             <FeatureCard
-              title="Organized Dashboard"
-              description="Teachers get analytics, upload stats, and management tools."
               icon="📊"
+              title="Organized Dashboard"
+              description="Manage uploads and view statistics neatly."
             />
           </div>
         </div>
       </section>
 
-      {/* RESOURCE LIST SECTION */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-3xl font-bold text-gray-800 mb-10 text-center">
-            Latest Resources
-          </h3>
+      {/* RESOURCE LIST */}
+      <section className="max-w-6xl mx-auto px-6 mt-14 pb-16">
+        <h3 className="text-3xl font-bold text-gray-900 text-center">
+          Latest Resources
+        </h3>
 
-          {loading && <p className="text-center text-gray-600">Loading resources...</p>}
+        {loading && <p className="text-center mt-10">Loading resources...</p>}
+        {error && <p className="text-center text-red-600 mt-10">Error loading resources</p>}
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resources.slice(0, 6).map((r) => (
-              <Card key={r._id} className="p-6">
-                <h4 className="text-xl font-semibold">{r.title}</h4>
-                <p className="text-gray-600 mt-2 line-clamp-3">{r.description}</p>
-                <Link
-                  to={/resources/${r._id}}
-                  className="text-indigo-600 underline mt-4 inline-block"
-                >
-                  View Resource
-                </Link>
-              </Card>
-            ))}
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
+          {resources.slice(0, 6).map((r) => (
+            <Link
+              key={r._id}
+              to={/resource/${r._id}}
+              className="p-5 bg-white border rounded-xl shadow-sm hover:shadow-md transition"
+            >
+              <h4 className="font-semibold text-lg text-gray-800">{r.title}</h4>
 
-            {resources.length === 0 && !loading && (
-              <p className="text-center col-span-full text-gray-600">
-                No resources available yet.
+              <p className="text-gray-600 mt-2 text-sm">
+                {(r.description || "No description available").slice(0, 80)}...
               </p>
-            )}
-          </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="py-6 text-center text-gray-600 border-t bg-gray-50">
         © {new Date().getFullYear()} EduConnect. All Rights Reserved.
       </footer>
