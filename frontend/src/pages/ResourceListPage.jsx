@@ -13,7 +13,7 @@ export default function LandingPage() {
           <h1 className="text-2xl font-bold text-indigo-600">EduConnect</h1>
 
           <div className="space-x-6 hidden sm:block">
-            <Link to="/resources" className="text-gray-700 hover:text-indigo-600 font-medium">Resources</Link>
+            <Link to="/" className="text-gray-700 hover:text-indigo-600 font-medium">Resources</Link>
             <Link to="/login" className="text-gray-700 hover:text-indigo-600 font-medium">Login</Link>
             <Link to="/register" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
               Get Started
