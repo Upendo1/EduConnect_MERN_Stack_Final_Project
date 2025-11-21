@@ -8,12 +8,13 @@ import ResourceListPage from './pages/ResourceListPage';
 import ResourcePreviewPage from './pages/ResourcePreviewPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
+import Toasts from './components/Toasts';
 
 export default function App(){
   const { user, logout } = useAuth();
   return (
     <>
-      <nav className="container">
+      <nav className="max-w-5xl mx-auto px-4">
         <div style={{flex:1}}>
           <Link to="/">EduConnect</Link>
         </div>
@@ -23,16 +24,18 @@ export default function App(){
               <span>{user.name} ({user.role})</span>
               <Link to="/dashboard">Dashboard</Link>
               <button onClick={logout}>Logout</button>
-            </>
+              <Toasts />
+</>
           ) : (
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
-            </>
+              <Toasts />
+</>
           )}
         </div>
       </nav>
-      <div className="container">
+      <div className="max-w-5xl mx-auto px-4">
         <Routes>
           <Route path="/" element={<ResourceListPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -42,6 +45,7 @@ export default function App(){
           <Route path="/resources/:id" element={<ProtectedRoute><ResourcePreviewPage /></ProtectedRoute>} />
         </Routes>
       </div>
-    </>
+      <Toasts />
+</>
   );
 }
