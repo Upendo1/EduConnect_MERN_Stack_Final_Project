@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
- import illustration from "./illustration.png";
-
+import illustration from "./illustration.png";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      
+
       {/* NAVBAR */}
       <nav className="w-full py-4 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -39,7 +38,7 @@ export default function LandingPage() {
 
             <div className="mt-6 flex gap-4">
               <Link
-                to="/resources"
+                to="/"
                 className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
               >
                 Browse Resources
@@ -56,12 +55,11 @@ export default function LandingPage() {
 
           {/* IMAGE / ILLUSTRATION */}
           <div className="flex justify-center">
-          
-           <img
-          src={illustration}
-          alt="Learning illustration"
-          className="w-4/5 max-w-md"
-        />
+            <img
+              src={illustration}
+              alt="Learning illustration"
+              className="w-4/5 max-w-md"
+            />
           </div>
         </div>
       </header>
@@ -73,6 +71,7 @@ export default function LandingPage() {
             What You Can Do
           </h3>
 
+          {/* Features Grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             <FeatureCard
               title="Upload Learning Materials"
