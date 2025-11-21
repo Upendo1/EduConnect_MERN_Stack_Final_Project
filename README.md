@@ -19,7 +19,7 @@ EduConnect is a full-stack web application designed to connect students and educ
 
 ## Folder Structure
 
-'''
+```
 
 educonnect/
 ├── backend/
@@ -50,7 +50,7 @@ educonnect/
 │ └── index.css
 └── README.md
 
-'''
+```
 
 
 ## Prerequisites
