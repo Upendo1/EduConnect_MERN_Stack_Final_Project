@@ -13,7 +13,6 @@ export default function ResourceListPage() {
     const load = async () => {
       setLoading(true);
       setError(null);
-
       try {
         const res = await api.get('/api/resources');
         setResources(res.data);
@@ -25,7 +24,6 @@ export default function ResourceListPage() {
         setLoading(false);
       }
     };
-
     load();
   }, []);
 
@@ -34,7 +32,9 @@ export default function ResourceListPage() {
       <h1 className="text-3xl font-bold text-gray-800">📚 Resources</h1>
 
       {loading && (
-        <Card className="p-6 text-center text-gray-600">Loading resources...</Card>
+        <Card className="p-6 text-center text-gray-600">
+          Loading resources...
+        </Card>
       )}
 
       {error && (
@@ -57,7 +57,7 @@ export default function ResourceListPage() {
 
             <div className="mt-4 flex items-center gap-4">
               <Link
-                to={`/resources/${r._id}`}   {/* FIXED */}
+                to={`/resources/${r._id}`}    // ✅ FIXED
                 className="text-sm font-medium text-indigo-600 hover:underline"
               >
                 View

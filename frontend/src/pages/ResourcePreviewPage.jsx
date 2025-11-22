@@ -14,7 +14,7 @@ export default function ResourcePreviewPage() {
       setLoading(true);
 
       try {
-        const res = await api.get(`/api/resources/${id}`);  // FIXED
+        const res = await api.get(`/api/resources/${id}`);   // ✅ FIXED
         setResource(res.data);
       } catch (err) {
         console.error(err);
@@ -37,7 +37,6 @@ export default function ResourcePreviewPage() {
     <Card className="max-w-2xl mx-auto mt-8">
       <h2 className="text-2xl font-semibold">{resource.title}</h2>
       <p className="text-gray-700 mt-2">{resource.description}</p>
-
       <div className="mt-4">
         <a
           href={resource.fileUrl}
