@@ -1,4 +1,4 @@
-[09:35, 22/11/2025] Allan PLP: import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import illustration from "./illustration.png";
@@ -23,110 +23,207 @@ export default function ResourceListPage() {
       try {
         const res = await api.get("/api/resources");
         setResources(res.data);
-      } catch (err) …
-[10:10, 22/11/2025] Allan PLP: preview page import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import api from "../services/api";
-import toast from "react-hot-toast";
-
-export default function ResourcePreviewPage() {
-  const { id } = useParams();
-  const [resource, setResource] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await api.get(/api/resources/${id});
-        setResource(res.data);
       } catch (err) {
-        console.error(err);
-        toast.error("Failed to load resource");
+        console.error("RESOURCE LOAD ERROR:", err);
+        toast.error("Failed to load resources");
+        setError(err);
       } finally {
         setLoading(false);
       }
     };
 
     load();
-  }, [id]);
+  }, [user]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* TOP BAR */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+
+      {/* NAVBAR */}
+      <nav className="w-full py-4 bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold text-indigo-600">
             EduConnect
           </Link>
 
-          <Link
-            to="/"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
-          >
-            Back to Resources
-          </Link>
+          <div className="space-x-6 hidden sm:flex">
+            <Link to="/" className="text-gray-700 hover:text-indigo-600 font-medium">
+              Resources
+            </Link>
+
+            {user ? (
+              <>
+                <span className="text-gray-700 font-medium">
+                  {user.name} ({user.role})
+                </span>
+
+                <Link to="/dashboard" className="text-gray-700 hover:text-indigo-600 font-medium">
+                  Dashboard
+                </Link>
+
+                <button
+                  onClick={logout}
+                  className="px-4 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-gray-700 hover:text-indigo-600 font-medium">
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <header className="flex-1 flex items-center">
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 py-16">
+          <div className="flex flex-col justify-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+              Discover, Share, and Learn with
+              <span className="text-indigo-600"> EduConnect</span>
+            </h2>
+
+            <p className="mt-4 text-lg text-gray-600">
+              A platform where teachers upload learning resources and students access them easily.
+            </p>
+
+            <div className="mt-6 flex gap-4">
+              <Link
+                to="/"
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
+              >
+                Browse Resources
+              </Link>
+
+              {!user && (
+                <Link
+                  to="/login"
+                  className="px-6 py-3 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-100 font-medium"
+                >
+                  Teacher Login
+                </Link>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <img src={illustration} alt="Learning illustration" className="w-4/5 max-w-md" />
+          </div>
         </div>
       </header>
 
-      {/* MAIN CONTENT */}
-      <main className="max-w-3xl mx-auto px-6 py-14">
-        {loading ? (
-          <div className="bg-white p-8 rounded-xl shadow text-center text-gray-600 text-lg">
-            Loading resource…
+      {/* FEATURES */}
+      <section className="bg-white py-14 border-t">
+        <div className="max-w-6xl mx-auto px-6">
+          <h3 className="text-3xl font-bold text-center text-gray-800">
+            What You Can Do
+          </h3>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            <FeatureCard
+              icon="📤"
+              title="Upload Learning Materials"
+              description="Teachers can upload documents, videos, and learning files easily."
+            />
+            <FeatureCard
+              icon="🌍"
+              title="Access Anywhere"
+              description="Students can view and download resources instantly."
+            />
+            <FeatureCard
+              icon="📊"
+              title="Organized Dashboard"
+              description="Manage uploads and see statistics neatly."
+            />
           </div>
-        ) : !resource ? (
-          <div className="bg-white p-8 rounded-xl shadow text-center text-red-500 text-lg">
-            Resource not found.
-          </div>
-        ) : (
-          <div className="bg-white p-10 rounded-2xl shadow-md">
-            {/* Title */}
-            <h1 className="text-3xl font-bold text-gray-900">{resource.title}</h1>
+        </div>
+      </section>
 
-            {/* Description */}
-            <p className="text-gray-700 text-lg mt-4 leading-relaxed">
-              {resource.description}
-            </p>
+      {/* RESOURCE LIST */}
+      <section className="max-w-6xl mx-auto px-6 mt-14 pb-16">
+        <h3 className="text-3xl font-bold text-gray-900 text-center">
+          Latest Resources
+        </h3>
 
-            {/* File Info Box */}
-            <div className="mt-8 p-6 bg-gray-100 rounded-xl border border-gray-300">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Attached File</h3>
-
-              <div className="flex items-center justify-between">
-                <p className="text-gray-700">
-                  {resource.fileUrl ? "A file is available for viewing or download." : "No file provided."}
-                </p>
-
-                {resource.fileUrl && (
-                  <a
-                    href={resource.fileUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
-                  >
-                    Open / Download
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Back Link */}
-            <div className="mt-10 text-center">
-              <Link
-                to="/"
-                className="text-indigo-600 hover:underline text-lg font-medium"
-              >
-                ← Back to all resources
-              </Link>
-            </div>
+        {!user && (
+          <div className="p-6 text-center text-gray-700 mt-10 text-lg bg-white border rounded-xl">
+            Please{" "}
+            <Link className="text-indigo-600 underline" to="/login">
+              login
+            </Link>{" "}
+            to view available resources.
           </div>
         )}
-      </main>
 
-      {/* FOOTER */}
-      <footer className="py-6 text-center text-gray-500 border-t mt-10 bg-gray-50">
+        {error && user && (
+          <div className="p-6 text-center text-red-600 font-medium bg-white border rounded-xl mt-6">
+            Failed to load resources.
+          </div>
+        )}
+
+        {user && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+            {resources.map((r) => (
+              <div
+                key={r._id}
+                className="p-6 border border-gray-200 shadow-sm hover:shadow-md transition rounded-xl bg-white"
+              >
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {r.title}
+                </h3>
+
+                <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                  {r.description}
+                </p>
+
+                <div className="mt-4 flex items-center gap-4">
+                  <Link
+                    to={'/resources/${r._id}'}
+                    className="text-sm font-medium text-indigo-600 hover:underline"
+                  >
+                    View
+                  </Link>
+
+                  <a
+                    href={r.fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm font-medium text-indigo-600 hover:underline"
+                  >
+                    Download
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <footer className="py-6 text-center text-gray-600 border-t bg-gray-50">
         © {new Date().getFullYear()} EduConnect. All Rights Reserved.
       </footer>
+
+    </div>
+  );
+}
+
+function FeatureCard({ title, description, icon }) {
+  return (
+    <div className="p-6 bg-gray-50 border rounded-xl shadow-sm hover:shadow-md transition">
+      <div className="text-4xl mb-3">{icon}</div>
+      <h4 className="text-xl font-semibold text-gray-800">{title}</h4>
+      <p className="mt-2 text-gray-600">{description}</p>
     </div>
   );
 }
