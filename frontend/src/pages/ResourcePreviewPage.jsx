@@ -13,7 +13,7 @@ export default function ResourcePreviewPage() {
     const load = async () => {
       setLoading(true);
       try {
-        const res = await api.get(`/api/resources/${id}`);  // FIXED
+        const res = await api.get(`/api/resources/${id}`);  // ✅ FIXED
         setResource(res.data);
       } catch (err) {
         console.error(err);
