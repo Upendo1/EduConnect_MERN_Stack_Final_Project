@@ -24,6 +24,7 @@ export default function ResourceListPage() {
         setLoading(false);
       }
     };
+
     load();
   }, []);
 
@@ -61,7 +62,6 @@ export default function ResourceListPage() {
             </p>
 
             <div className="mt-4 flex items-center gap-4">
-              ✅ FIXED HERE
               <Link
                 to={`/resources/${r._id}`}
                 className="text-sm font-medium text-indigo-600 hover:underline"
