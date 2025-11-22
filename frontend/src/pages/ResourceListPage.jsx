@@ -1,68 +1,91 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import api from '../services/api';
+import { Link } from 'react-router-dom';
+import Card from '../components/Card';
+import toast from 'react-hot-toast';
 
 export default function ResourceListPage() {
   const [resources, setResources] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchResources = async () => {
+    const load = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const res = await fetch("https://educonnect-backend.onrender.com/api/resources");
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch resources");
-        }
-
-        const data = await res.json();
-        setResources(data);
-      } catch (error) {
-        console.error("Error fetching resources:", error);
+        const res = await api.get('/api/resources');
+        setResources(res.data);
+      } catch (err) {
+        console.error(err);
+        setError(err);
+        toast.error('Failed to load resources');
       } finally {
         setLoading(false);
       }
     };
-
-    fetchResources();
+    load();
   }, []);
 
-  if (loading) {
-    return <p className="text-center mt-10">Loading resources...</p>;
-  }
-
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Learning Resources</h1>
+    <div className="max-w-6xl mx-auto mt-10 px-4 space-y-6">
+      <h1 className="text-3xl font-bold text-gray-800">📚 Resources</h1>
 
-      {resources.length === 0 ? (
-        <p>No resources available</p>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {resources.map((r) => (
-            <div
-              key={r._id}
-              className="border p-4 rounded-lg shadow-sm hover:shadow-md transition"
-            >
-              <h2 className="text-lg font-semibold mb-2">
-                {r.title}
-              </h2>
+      {/* Loading state */}
+      {loading && (
+        <Card className="p-6 text-center text-gray-600">
+          Loading resources...
+        </Card>
+      )}
 
-              <p className="text-gray-600 text-sm mb-4">
-                {r.description?.slice(0, 80)}...
-              </p>
+      {/* Error state */}
+      {error && (
+        <Card className="p-6 text-center text-red-600 font-medium">
+          Failed to load resources.
+        </Card>
+      )}
 
-              <div className="mt-4 flex items-center gap-4">
-                {/* ✅ FIXED LINE */}
-                <Link
-                  to={`/resources/${r._id}`}
-                  className="text-sm font-medium text-indigo-600 hover:underline"
-                >
-                  View
-                </Link>
-              </div>
+      {/* Resources Grid */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {resources.map((r) => (
+          <Card
+            key={r._id}
+            className="p-6 border border-gray-200 shadow-sm hover:shadow-md transition rounded-xl bg-white"
+          >
+            <h3 className="text-xl font-semibold text-gray-800">
+              {r.title}
+            </h3>
+
+            <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+              {r.description}
+            </p>
+
+            <div className="mt-4 flex items-center gap-4">
+              <Link
+                to={/resources/${r._id}}
+                className="text-sm font-medium text-indigo-600 hover:underline"
+              >
+                View
+              </Link>
+
+              <a
+                href={r.fileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm font-medium text-indigo-600 hover:underline"
+              >
+                Download
+              </a>
             </div>
-          ))}
-        </div>
+          </Card>
+        ))}
+      </div>
+
+      {/* No resources */}
+      {!loading && resources.length === 0 && (
+        <Card className="p-6 text-center text-gray-600">
+          No resources available yet.
+        </Card>
       )}
     </div>
   );
