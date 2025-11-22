@@ -194,7 +194,7 @@ export default function ResourceListPage() {
 
                 <div className="mt-4 flex items-center gap-4">
                   <Link
-                    to={/resources/${r._id}}
+                    to={'/resources/${r._id}'}
                     className="text-sm font-medium text-indigo-600 hover:underline"
                   >
                     View
