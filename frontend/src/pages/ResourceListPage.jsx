@@ -12,22 +12,21 @@ export default function ResourceListPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // ---------------------------------------------------
-  // LOAD RESOURCES ONLY IF USER IS LOGGED IN
-  // ---------------------------------------------------
+  // Load resources only if logged in
   useEffect(() => {
-    if (!user) return; // Stop if not logged in
+    if (!user) return;
 
     const load = async () => {
       setLoading(true);
       setError(null);
+
       try {
         const res = await api.get("/api/resources");
         setResources(res.data);
       } catch (err) {
         console.error("RESOURCE LOAD ERROR:", err);
-        setError(err);
         toast.error("Failed to load resources");
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -86,7 +85,7 @@ export default function ResourceListPage() {
         </div>
       </nav>
 
-      {/* HERO SECTION */}
+      {/* HERO */}
       <header className="flex-1 flex items-center">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 py-16">
           <div className="flex flex-col justify-center">
@@ -96,8 +95,7 @@ export default function ResourceListPage() {
             </h2>
 
             <p className="mt-4 text-lg text-gray-600">
-              A simple platform where teachers upload learning resources and
-              students can easily access them.
+              A platform where teachers upload learning resources and students access them easily.
             </p>
 
             <div className="mt-6 flex gap-4">
@@ -120,7 +118,7 @@ export default function ResourceListPage() {
           </div>
 
           <div className="flex justify-center">
-            <img src={illustration} alt="Learning" className="w-4/5 max-w-md" />
+            <img src={illustration} alt="Learning illustration" className="w-4/5 max-w-md" />
           </div>
         </div>
       </header>
@@ -136,17 +134,17 @@ export default function ResourceListPage() {
             <FeatureCard
               icon="📤"
               title="Upload Learning Materials"
-              description="Teachers can upload documents, videos, and files easily."
+              description="Teachers can upload documents, videos, and learning files easily."
             />
             <FeatureCard
               icon="🌍"
-              title="Access From Anywhere"
+              title="Access Anywhere"
               description="Students can view and download resources instantly."
             />
             <FeatureCard
               icon="📊"
               title="Organized Dashboard"
-              description="Manage uploads and view statistics neatly."
+              description="Manage uploads and see statistics neatly."
             />
           </div>
         </div>
@@ -158,7 +156,6 @@ export default function ResourceListPage() {
           Latest Resources
         </h3>
 
-        {/* NOT LOGGED IN */}
         {!user && (
           <div className="p-6 text-center text-gray-700 mt-10 text-lg bg-white border rounded-xl">
             Please{" "}
@@ -169,14 +166,12 @@ export default function ResourceListPage() {
           </div>
         )}
 
-        {/* ERROR */}
         {error && user && (
           <div className="p-6 text-center text-red-600 font-medium bg-white border rounded-xl mt-6">
             Failed to load resources.
           </div>
         )}
 
-        {/* Resources Grid */}
         {user && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
             {resources.map((r) => (
@@ -194,7 +189,7 @@ export default function ResourceListPage() {
 
                 <div className="mt-4 flex items-center gap-4">
                   <Link
-                    to={'/resources/${r._id}'}
+                    to={/resources/${r._id}}
                     className="text-sm font-medium text-indigo-600 hover:underline"
                   >
                     View
@@ -218,6 +213,7 @@ export default function ResourceListPage() {
       <footer className="py-6 text-center text-gray-600 border-t bg-gray-50">
         © {new Date().getFullYear()} EduConnect. All Rights Reserved.
       </footer>
+
     </div>
   );
 }
