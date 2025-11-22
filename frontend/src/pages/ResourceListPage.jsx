@@ -13,6 +13,7 @@ export default function ResourceListPage() {
     const load = async () => {
       setLoading(true);
       setError(null);
+
       try {
         const res = await api.get('/api/resources');
         setResources(res.data);
@@ -24,6 +25,7 @@ export default function ResourceListPage() {
         setLoading(false);
       }
     };
+
     load();
   }, []);
 
@@ -31,30 +33,23 @@ export default function ResourceListPage() {
     <div className="max-w-6xl mx-auto mt-10 px-4 space-y-6">
       <h1 className="text-3xl font-bold text-gray-800">📚 Resources</h1>
 
-      {/* Loading state */}
       {loading && (
-        <Card className="p-6 text-center text-gray-600">
-          Loading resources...
-        </Card>
+        <Card className="p-6 text-center text-gray-600">Loading resources...</Card>
       )}
 
-      {/* Error state */}
       {error && (
         <Card className="p-6 text-center text-red-600 font-medium">
           Failed to load resources.
         </Card>
       )}
 
-      {/* Resources Grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {resources.map((r) => (
           <Card
             key={r._id}
             className="p-6 border border-gray-200 shadow-sm hover:shadow-md transition rounded-xl bg-white"
           >
-            <h3 className="text-xl font-semibold text-gray-800">
-              {r.title}
-            </h3>
+            <h3 className="text-xl font-semibold text-gray-800">{r.title}</h3>
 
             <p className="text-sm text-gray-600 mt-2 line-clamp-3">
               {r.description}
@@ -62,7 +57,7 @@ export default function ResourceListPage() {
 
             <div className="mt-4 flex items-center gap-4">
               <Link
-                to={/resources/${r._id}}
+                to={`/resources/${r._id}`}   {/* FIXED */}
                 className="text-sm font-medium text-indigo-600 hover:underline"
               >
                 View
@@ -81,7 +76,6 @@ export default function ResourceListPage() {
         ))}
       </div>
 
-      {/* No resources */}
       {!loading && resources.length === 0 && (
         <Card className="p-6 text-center text-gray-600">
           No resources available yet.
