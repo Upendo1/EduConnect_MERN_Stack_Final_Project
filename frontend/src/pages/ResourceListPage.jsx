@@ -188,10 +188,9 @@ export default function ResourceListPage() {
                 </p>
 
                 <div className="mt-4 flex items-center gap-4">
-                  <Link
-                    to={'/resources/${r._id}'}
-                    className="text-sm font-medium text-indigo-600 hover:underline"
-                  >
+                <Link
+                to={/resources/${r._id}}
+                className="text-sm font-medium text-indigo-600 hover:underline">
                     View
                   </Link>
 
