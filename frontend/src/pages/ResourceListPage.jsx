@@ -12,8 +12,12 @@ export default function ResourceListPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // LOAD RESOURCES
+  // ---------------------------------------------------
+  // LOAD RESOURCES ONLY IF USER IS LOGGED IN
+  // ---------------------------------------------------
   useEffect(() => {
+    if (!user) return; // Stop if not logged in
+
     const load = async () => {
       setLoading(true);
       setError(null);
@@ -28,8 +32,9 @@ export default function ResourceListPage() {
         setLoading(false);
       }
     };
+
     load();
-  }, []);
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -153,48 +158,61 @@ export default function ResourceListPage() {
           Latest Resources
         </h3>
 
+        {/* NOT LOGGED IN */}
+        {!user && (
+          <div className="p-6 text-center text-gray-700 mt-10 text-lg bg-white border rounded-xl">
+            Please{" "}
+            <Link className="text-indigo-600 underline" to="/login">
+              login
+            </Link>{" "}
+            to view available resources.
+          </div>
+        )}
+
         {/* ERROR */}
-        {error && (
+        {error && user && (
           <div className="p-6 text-center text-red-600 font-medium bg-white border rounded-xl mt-6">
             Failed to load resources.
           </div>
         )}
 
         {/* Resources Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          {resources.map((r) => (
-            <div
-              key={r._id}
-              className="p-6 border border-gray-200 shadow-sm hover:shadow-md transition rounded-xl bg-white"
-            >
-              <h3 className="text-xl font-semibold text-gray-800">
-                {r.title}
-              </h3>
+        {user && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+            {resources.map((r) => (
+              <div
+                key={r._id}
+                className="p-6 border border-gray-200 shadow-sm hover:shadow-md transition rounded-xl bg-white"
+              >
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {r.title}
+                </h3>
 
-              <p className="text-sm text-gray-600 mt-2 line-clamp-3">
-                {r.description}
-              </p>
+                <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                  {r.description}
+                </p>
 
-              <div className="mt-4 flex items-center gap-4">
-                <Link
-                  to={'/resources/${r._id}'}
-                  className="text-sm font-medium text-indigo-600 hover:underline"
-                >
-                  View
-                </Link>
+                <div className="mt-4 flex items-center gap-4">
+                  <Link
+                    to={/resources/${r._id}}
+                    className="text-sm font-medium text-indigo-600 hover:underline"
+                  >
+                    View
+                  </Link>
 
-                <a
-                  href={r.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm font-medium text-indigo-600 hover:underline"
-                >
-                  Download
-                </a>
+                  <a
+                    href={r.fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm font-medium text-indigo-600 hover:underline"
+                  >
+                    Download
+                  </a>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <footer className="py-6 text-center text-gray-600 border-t bg-gray-50">
