@@ -26,8 +26,8 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-
-const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE_URL
+// const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com";
 
 const StudentDashboard = () => {
   const [resources, setResources] = useState([]);
@@ -45,7 +45,7 @@ const StudentDashboard = () => {
   // --- FETCH CATEGORIES ---
   const fetchCategories = async () => {
     try {
-      const res = await api.get(`${API_BASE}/api/categories`, { headers: authHeaders() });
+      const res = await api.get(`${API_BASE}/categories`, { headers: authHeaders() });
       setCategories(res.data || []);
     } catch (err) {
       toast({
@@ -66,7 +66,7 @@ const StudentDashboard = () => {
         params.category = selectedCategory;
       }
 
-      const res = await api.get(`${API_BASE}/api/resources`, {
+      const res = await api.get(`${API_BASE}/resources`, {
         params,
         headers: authHeaders(),
       });
@@ -96,14 +96,14 @@ const StudentDashboard = () => {
   const trackView = async (_id) => {
     if (!_id) return console.error("Missing resource ID"); // safety
     try {
-      await api.post(`${API_BASE}/api/resources/${_id}/view`, {}, { headers: authHeaders() });
+      await api.post(`${API_BASE}/resources/${_id}/view`, {}, { headers: authHeaders() });
     } catch {}
   };
 
   const trackDownload = async (_id) => {
     if (!_id) return console.error("Missing resource ID"); // safety
     try {
-      await api.post(`${API_BASE}/api/resources/${_id}/download`, {}, { headers: authHeaders() });
+      await api.post(`${API_BASE}/resources/${_id}/download`, {}, { headers: authHeaders() });
     } catch {}
   };
 

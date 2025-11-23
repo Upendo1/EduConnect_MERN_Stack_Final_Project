@@ -11,8 +11,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Plus, Eye, Download, Trash2, BarChart } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com";
-
+// const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE_URL
 interface Resource {
   _id: string;
   title: string;
@@ -57,7 +57,7 @@ const TeacherDashboard = () => {
   // ---------------------------
   const fetchCategories = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/categories`);
+      const res = await fetch(`${API_BASE}/categories`);
       const data = await res.json();
       setCategories(data);
     } catch (err) {
@@ -70,7 +70,7 @@ const TeacherDashboard = () => {
   // ---------------------------
   const fetchResources = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/resources`);
+      const res = await fetch(`${API_BASE}/resources`);
       const data = await res.json();
       setResources(data);
     } catch (err) {
@@ -83,7 +83,7 @@ const TeacherDashboard = () => {
   // ---------------------------
   const fetchAnalytics = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/resources/analytics`);
+      const res = await fetch(`${API_BASE}/resources/analytics`);
       const data = await res.json();
       setAnalyticsData(data);
     } catch (err) {
@@ -107,7 +107,7 @@ const TeacherDashboard = () => {
     form.append("category", formData.category);
     if (formData.file) form.append("file", formData.file);
 
-    const res = await fetch(`${API_BASE}/api/resources`, {
+    const res = await fetch(`${API_BASE}/resources`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,   // ✅ REQUIRED
@@ -149,7 +149,7 @@ const TeacherDashboard = () => {
   //     form.append("category", formData.category);
   //     if (formData.file) form.append("file", formData.file);
 
-  //     const res = await fetch(`${API_BASE}/api/resources`, {
+  //     const res = await fetch(`${API_BASE}/resources`, {
   //       method: 'POST',
   //       body: form
   //     });
@@ -182,7 +182,7 @@ const TeacherDashboard = () => {
   // ---------------------------
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`${API_BASE}/api/resources/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE}/resources/${id}`, { method: 'DELETE' });
 
       if (!res.ok) {
         toast({ title: 'Error', description: 'Failed to delete', variant: 'destructive' });

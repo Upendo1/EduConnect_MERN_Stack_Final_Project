@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://educonnect-mern-stack-final-project.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL, // <--- dynamic base URL
+  withCredentials: false
 });
 
 // AUTH
@@ -14,7 +15,7 @@ export const login = (payload) =>
 export const me = (token) =>
   api
     .get('/auth/me', {
-      headers: { Authorization: Bearer ${token} },
+      headers: { Authorization: `Bearer ${token}` },
     })
     .then((r) => r.data);
 
@@ -25,7 +26,7 @@ export const listPosts = () =>
 export const createPost = (payload, token) =>
   api
     .post('/posts', payload, {
-      headers: { Authorization: Bearer ${token} },
+      headers: { Authorization: `Bearer ${token}` },
     })
     .then((r) => r.data);
 
@@ -34,7 +35,7 @@ export const uploadFiles = (formData, token) =>
   api
     .post('/upload', formData, {
       headers: {
-        Authorization: token ? Bearer ${token} : undefined,
+        Authorization: token ? `Bearer ${token}` : undefined,
         'Content-Type': 'multipart/form-data',
       },
     })

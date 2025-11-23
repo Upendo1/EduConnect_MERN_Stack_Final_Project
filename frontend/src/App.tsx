@@ -18,7 +18,6 @@ const queryClient = new QueryClient();
 const AppRoutes = () => {
   const { loading } = useAuth();
 
-  // ⛔ Prevent ANY page from rendering until the token/user loads
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

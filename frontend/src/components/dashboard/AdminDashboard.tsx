@@ -21,7 +21,7 @@ import {
   Cell
 } from 'recharts';
 
-const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/"; // change to your backend URL
+const API_BASE = import.meta.env.VITE_API_BASE_URL; // change to your backend URL
 
 interface Stats {
   totalUsers: number;
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE}/api/admin/stats`, {
+      const res = await fetch(`${API_BASE}/admin/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
   const fetchCategoryData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE}/api/categories`, {
+      const res = await fetch(`${API_BASE}/categories`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -95,7 +95,7 @@ const AdminDashboard = () => {
 
       const categoryStats = await Promise.all(
         categories.map(async (category: any) => {
-          const res = await fetch(`${API_BASE}/api/resources/byCategory/${category._id}`, {
+          const res = await fetch(`${API_BASE}/resources/byCategory/${category._id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
 
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
   const fetchActivityData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE}/api/resources/recent`, {
+      const res = await fetch(`${API_BASE}/resources/recent`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -147,7 +147,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`${API_BASE}/api/categories`, {
+      const res = await fetch(`${API_BASE}/categories`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

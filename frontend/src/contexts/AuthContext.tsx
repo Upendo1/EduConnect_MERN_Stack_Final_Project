@@ -26,8 +26,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/api";
+const API_BASE = import.meta.env.VITE_API_BASE_URL
+  // const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/api";
 
   // 📌 Fetch logged-in user from backend
   const fetchUser = async () => {
