@@ -47,7 +47,7 @@ const Auth = () => {
           description: 'You have successfully logged in.',
         });
 
-        navigate('/'); // ✅ NOW THIS WORKS
+        navigate('/auth'); // ✅ NOW THIS WORKS
       } else {
         // REGISTER
         const res = await api.post(`${API_BASE}/auth/register`, {
