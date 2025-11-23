@@ -6,6 +6,8 @@ import StudentDashboard from "@/components/dashboard/StudentDashboard";
 import TeacherDashboard from "@/components/dashboard/TeacherDashboard";
 import AdminDashboard from "@/components/dashboard/AdminDashboard";
 
+import { Button } from "@/components/ui/button";   // ✅ Add this
+
 const Dashboard = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ const Dashboard = () => {
   // User exists → load correct dashboard
   if (user) {
     const role = user.role?.toLowerCase();
-    // console.log("--"+user.role?.toLowerCase()+"--")
+
     switch (role) {
       case "student":
         return <StudentDashboard />;
@@ -40,26 +42,23 @@ const Dashboard = () => {
       case "admin":
         return <AdminDashboard />;
 
-
       default:
         return (
-       
           <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-  {/* Spinner Loader */}
-  <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
 
-  <p className="text-lg font-medium text-muted-foreground text-center px-4">
-    Still loading… this may take a moment. You can refresh the page if it takes too long.
-  </p>
+            <p className="text-lg font-medium text-muted-foreground text-center px-4">
+              Still loading… this may take a moment. You can refresh the page if it takes too long.
+            </p>
 
-  <Button
-    onClick={() => window.location.href = "/"}
-    className="mt-2"
-  >
-    Dashboard
-  </Button>
-</div>
-      );
+            <Button
+              onClick={() => navigate("/")}   // use navigate instead of window.location
+              className="mt-2"
+            >
+              Go to Homepage
+            </Button>
+          </div>
+        );
     }
   }
 
