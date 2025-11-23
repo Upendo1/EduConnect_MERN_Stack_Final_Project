@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Plus, Eye, Download, Trash2, BarChart } from 'lucide-react';
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const API_BASE = "http://localhost:4000";
+const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com";
 
 interface Resource {
   _id: string;

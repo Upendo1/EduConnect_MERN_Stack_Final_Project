@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE = "http://localhost:4000/api";
+  const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/api";
 
   // 📌 Fetch logged-in user from backend
   const fetchUser = async () => {

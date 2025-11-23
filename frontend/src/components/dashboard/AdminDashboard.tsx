@@ -21,7 +21,7 @@ import {
   Cell
 } from 'recharts';
 
-const API_BASE = "http://localhost:4000"; // change to your backend URL
+const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/"; // change to your backend URL
 
 interface Stats {
   totalUsers: number;

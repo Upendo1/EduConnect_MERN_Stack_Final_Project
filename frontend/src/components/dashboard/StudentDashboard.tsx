@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-const API_BASE = "http://localhost:4000";
+const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com";
 
 const StudentDashboard = () => {
   const [resources, setResources] = useState([]);
