@@ -18,10 +18,20 @@ const resourceRoutes=require("./routes/resourceRoutes");
 const adminRoutes=require("./routes/adminRoutes");
 
 const app = express();
-app.use(cors());
+const allowedOrigins = [
+    "https://edu-connect-snowy.vercel.app",
+    "https://educonnect-mern-stack-final-project.onrender.com"
+];
+
 app.use(cors({
-  origin: "https://edu-connect-snowy.vercel.app",
-  credentials: true
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
 }));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
