@@ -1,32 +1,58 @@
-// require('dotenv').config();
+require('dotenv').config();
+require('express-async-errors');
 const express = require('express');
+const http = require('http');
+const bodyParser = require('body-parser');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
-const dotenv = require("dotenv");
 const authRoutes = require('./routes/authRoutes');
-const resourceRoutes = require('./routes/resourceRoutes');
-dotenv.config();
+const postRoutes = require('./routes/postRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+const errorHandler = require('./middleware/errorHandler');
+const categoryRoutes = require("./routes/categoryRoutes");
+const resourceRoutes=require("./routes/resourceRoutes");
+const adminRoutes=require("./routes/adminRoutes");
+
 const app = express();
+app.use(cors());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://edu-connect-snowy.vercel.app',
-  credentials: true,
+  origin: "https://edu-connect-snowy.vercel.app/",
+  credentials: true
 }));
-app.use(express.json());
-app.use(cookieParser());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Connect DB
-connectDB();
-
-// Routes
+app.use('/uploads', express.static(process.env.UPLOADS_DIR || './uploads'));
 app.use('/api/auth', authRoutes);
-app.use('/api/resources', resourceRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/resources", resourceRoutes);
+app.use('/api/admin', adminRoutes);
+app.get('/', (req, res) => res.send('EduConnect API running'));
 
-// Error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Server error' });
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 4000;
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server, { cors: { origin: '*' } });
+
+io.on('connection', (socket) => {
+  console.log('Socket connected', socket.id);
+  socket.on('disconnect', () => console.log('Socket disconnected', socket.id));
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.use((req, res, next) => { req.io = io; next(); });
+
+connectDB(process.env.MONGODB_URI || 'mongodb://localhost:27017/educonnect')
+  .then(() => server.listen(PORT, () => console.log(`Server listening on ${PORT}`)))
+  .catch(err => console.error('DB connect failed', err));

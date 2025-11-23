@@ -1,0 +1,42 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Africa/Nairobi
+X-LIC-LOCATION:Africa/Nairobi
+BEGIN:STANDARD
+TZOFFSETFROM:+0300
+TZOFFSETTO:+0300
+TZNAME:GMT+3
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Africa/Nairobi:20251117T200000
+DTEND;TZID=Africa/Nairobi:20251117T213000
+RRULE:FREQ=WEEKLY;BYDAY=FR,MO,TH,TU,WE
+DTSTAMP:20251117T132157Z
+ORGANIZER;CN=Monicah Mwanzia:mailto:monicah@promptbi.ai
+UID:2v3147sq78khhs1smmfahf120h@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=allanmboti@gmail.com;X-NUM-GUESTS=0:mailto:allanmboti@gmail.com
+X-GOOGLE-CONFERENCE:https://meet.google.com/bcn-jnqx-nqh
+X-MICROSOFT-CDO-OWNERAPPTID:1995864267
+CREATED:20251117T132041Z
+DESCRIPTION:-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~::~:~::-\nJoin with Google Meet: https://meet.google.com/bc
+ n-jnqx-nqh\nOr dial: (KE) +254 20 3893887 PIN: 1696057249321#\nMore phone n
+ umbers: https://tel.meet/bcn-jnqx-nqh?pin=1696057249321&hs=7\n\nLearn more 
+ about Meet at: https://support.google.com/a/users/answer/9282720\n\nPlease 
+ do not edit this section.\n-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20251117T132155Z
+LOCATION:https://meet.google.com/bcn-jnqx-nqh
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:Promptbi internship training
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

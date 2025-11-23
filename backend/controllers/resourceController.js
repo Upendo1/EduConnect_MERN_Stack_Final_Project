@@ -1,79 +1,158 @@
-const Resource = require('../models/Resource');
-const cloudinary = require('cloudinary').v2;
-const streamifier = require('streamifier');
+const Resource = require("../models/Resource");
+const Category = require("../models/Category");
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dkikwqxtr',
-  api_key: process.env.CLOUDINARY_API_KEY || 994221665445739,
-  api_secret: process.env.CLOUDINARY_API_SECRET || 'gTZOSbdKl2RJQDussFTOuya_7UY',
-});
-
-const uploadBufferToCloudinary = (buffer, resourceType='auto') => {
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream({ resource_type: resourceType }, (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
-    });
-    streamifier.createReadStream(buffer).pipe(stream);
-  });
-};
-
-exports.upload = async (req, res) => {
+// -----------------------------
+// GET ALL RESOURCES
+// -----------------------------
+exports.getResources = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
-    const file = req.file;
-    // determine resource type
-    const mime = file.mimetype;
-    let resourceType = 'auto';
-    if (mime.startsWith('image/')) resourceType = 'image';
-    else if (mime.startsWith('video/')) resourceType = 'video';
-    else resourceType = 'raw'; // for pdfs, docs, etc.
+    const resources = await Resource.find()
+      .populate("category", "name")
+      .populate("teacher", "name");
 
-    const result = await uploadBufferToCloudinary(file.buffer, resourceType);
-    const resource = await Resource.create({
-      title: req.body.title || file.originalname,
-      description: req.body.description || '',
-      fileType: mime,
-      fileUrl: result.secure_url,
-      uploadedBy: req.user._id,
-    });
-    res.status(201).json(resource);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Upload failed', error: err.message });
-  }
-};
-
-exports.list = async (req, res) => {
-  try {
-    const resources = await Resource.find().populate('uploadedBy', 'name email role').sort({ createdAt: -1 });
     res.json(resources);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+  } catch (error) {
+    console.error("Get Resources Error:", error);
+    res.status(500).json({ message: "Failed to fetch resources" });
   }
 };
 
-exports.getById = async (req, res) => {
+// -----------------------------
+// CREATE RESOURCE (upload)
+// -----------------------------
+exports.createResource = async (req, res) => {
   try {
-    const resource = await Resource.findById(req.params.id).populate('uploadedBy', 'name email role');
-    if (!resource) return res.status(404).json({ message: 'Not found' });
+    if (!req.user?._id) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ message: "File is required" });
+    }
+
+    if (!req.body.category || req.body.category.trim() === "") {
+      return res.status(400).json({ message: "Category is required" });
+    }
+
+    const resource = await Resource.create({
+      title: req.body.title,
+      description: req.body.description,
+      category: req.body.category,
+      file_url: file.path,
+      file_type: file.mimetype,
+      file_size: file.size,
+      teacher: req.user._id,
+    });
+
     res.json(resource);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+  } catch (error) {
+    console.error("Create Resource Error:", error);
+    res.status(500).json({ message: "Upload failed", error: error.message });
   }
 };
 
-exports.delete = async (req, res) => {
+// -----------------------------
+// GET RECENT RESOURCES
+// -----------------------------
+exports.getRecentResources = async (req, res) => {
   try {
-    const resource = await Resource.findById(req.params.id);
-    if (!resource) return res.status(404).json({ message: 'Not found' });
-    // optional: delete from cloudinary (if public_id available). We stored secure_url only; skipping deletion.
-    await resource.remove();
-    res.json({ message: 'Deleted' });
+    const recent = await Resource.find()
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .populate("category", "name")
+      .populate("teacher", "name");
+
+    res.json(recent);
+  } catch (error) {
+    console.error("Get Recent Resources Error:", error);
+    res.status(500).json({ message: "Failed to fetch recent resources" });
+  }
+};
+
+// -----------------------------
+// GET RESOURCES BY CATEGORY
+// -----------------------------
+exports.getResourcesByCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    const resources = await Resource.find({ category: categoryId })
+      .populate("category", "name")
+      .populate("teacher", "name");
+
+    res.json(resources);
+  } catch (error) {
+    console.error("Get By Category Error:", error);
+    res.status(500).json({ message: "Failed to fetch category resources" });
+  }
+};
+
+// -----------------------------
+// DELETE RESOURCE
+// -----------------------------
+exports.deleteResource = async (req, res) => {
+  try {
+    await Resource.findByIdAndDelete(req.params.id);
+    res.json({ message: "Deleted successfully" });
+  } catch (error) {
+    console.error("Delete Error:", error);
+    res.status(500).json({ message: "Failed to delete resource" });
+  }
+};
+
+// -----------------------------
+// ANALYTICS
+// -----------------------------
+exports.getAnalytics = async (req, res) => {
+  try {
+    const resources = await Resource.find();
+
+    const totalViews = resources.reduce((sum, r) => sum + (r.views || 0), 0);
+    const totalDownloads = resources.reduce(
+      (sum, r) => sum + (r.downloads || 0),
+      0
+    );
+
+    res.json({
+      totalResources: resources.length,
+      totalViews,
+      totalDownloads,
+    });
+  } catch (error) {
+    console.error("Analytics Error:", error);
+    res.status(500).json({ message: "Failed to fetch analytics" });
+  }
+};
+
+// -----------------------------
+// TRACK VIEW
+// -----------------------------
+exports.trackView = async (req, res) => {
+  try {
+    await Resource.findByIdAndUpdate(req.params.id, {
+      $inc: { views: 1 },
+    });
+
+    res.json({ success: true });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Track View Error:", err);
+    res.status(500).json({ error: "Failed to track view" });
+  }
+};
+
+// -----------------------------
+// TRACK DOWNLOAD
+// -----------------------------
+exports.trackDownload = async (req, res) => {
+  try {
+    await Resource.findByIdAndUpdate(req.params.id, {
+      $inc: { downloads: 1 },
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Track Download Error:", err);
+    res.status(500).json({ error: "Failed to track download" });
   }
 };

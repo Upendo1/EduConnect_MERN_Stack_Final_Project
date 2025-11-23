@@ -1,15 +1,40 @@
-const express = require('express');
-const router = express.Router();
-const { upload, list, getById, delete: deleteResource } = require('../controllers/resourceController');
-const uploadMiddleware = require('../middleware/upload');
-const { protect, authorizeRoles } = require('../middleware/authMiddleware');
+const router = require("express").Router();
+const auth = require("../middleware/authMiddleware");
+const upload = require("../middleware/upload");
 
-// List and get
-router.get('/', protect, list);
-router.get('/:id', protect, getById);
+const {
+  getResources,
+  createResource,
+  deleteResource,
+  getAnalytics,
+  getRecentResources,
+  getResourcesByCategory,
+  trackView,
+  trackDownload
+} = require("../controllers/resourceController");
 
-// Teacher/Admin upload and delete
-router.post('/', protect, authorizeRoles('teacher','admin'), uploadMiddleware.single('file'), upload);
-router.delete('/:id', protect, authorizeRoles('teacher','admin'), deleteResource);
+// Get ALL resources
+router.get("/", getResources);
+
+// Get recent resources
+router.get("/recent", getRecentResources);
+
+// Get resources by category
+router.get("/byCategory/:categoryId", getResourcesByCategory);
+
+// Create resource
+router.post("/", auth, upload.single("file"), createResource);
+
+// Delete resource
+router.delete("/:id", auth, deleteResource);
+
+// Analytics
+router.get("/analytics", getAnalytics);
+
+// Track view
+router.post("/:id/view", trackView);
+
+// Track download
+router.post("/:id/download", trackDownload);
 
 module.exports = router;
