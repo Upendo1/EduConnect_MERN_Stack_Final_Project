@@ -5,8 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import StudentDashboard from "@/components/dashboard/StudentDashboard";
 import TeacherDashboard from "@/components/dashboard/TeacherDashboard";
 import AdminDashboard from "@/components/dashboard/AdminDashboard";
-
-import { Button } from "@/components/ui/button";   // ✅ Add this
+import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
@@ -28,31 +27,27 @@ const Dashboard = () => {
     );
   }
 
-  // User exists → load correct dashboard
+  // If user exists, render role-specific dashboard
   if (user) {
-    const role = user.role?.toLowerCase();
-
-    switch (role) {
+    switch (user.role.toLowerCase()) {
       case "student":
         return <StudentDashboard />;
-
       case "teacher":
         return <TeacherDashboard />;
-
       case "admin":
         return <AdminDashboard />;
-
       default:
+        // Unknown role fallback
         return (
-          <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+          <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
 
-            <p className="text-lg font-medium text-muted-foreground text-center px-4">
-              Still loading… this may take a moment. You can refresh the page if it takes too long.
+            <p className="text-lg font-medium text-muted-foreground">
+              Unknown role detected… you can return to the homepage.
             </p>
 
             <Button
-              onClick={() => navigate("/")}   // use navigate instead of window.location
+              onClick={() => navigate("/")} // SPA navigation
               className="mt-2"
             >
               Go to Homepage
@@ -62,7 +57,23 @@ const Dashboard = () => {
     }
   }
 
-  return null;
+  // If somehow user is null after loading, show homepage button
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
+
+      <p className="text-lg font-medium text-muted-foreground">
+        Still loading… you can return to the homepage.
+      </p>
+
+      <Button
+        onClick={() => navigate("/")}
+        className="mt-2"
+      >
+        Go to Dashboard
+      </Button>
+    </div>
+  );
 };
 
 export default Dashboard;
