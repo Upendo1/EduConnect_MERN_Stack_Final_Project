@@ -4,13 +4,25 @@ import api from '@/api/apiClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { GraduationCap, BookOpen, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
-const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/api";
+const API_BASE = 'https://educonnect-mern-stack-final-project.onrender.com/api';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -41,7 +53,6 @@ const Auth = () => {
 
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
-
         setUser(user);
 
         toast({
@@ -63,7 +74,6 @@ const Auth = () => {
 
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
-
         setUser(user);
 
         toast({
@@ -136,7 +146,10 @@ const Auth = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="role">I am a...</Label>
-                  <Select value={role} onValueChange={(value: any) => setRole(value)}>
+                  <Select
+                    value={role}
+                    onValueChange={(value: any) => setRole(value)}
+                  >
                     <SelectTrigger id="role">
                       <SelectValue />
                     </SelectTrigger>
@@ -147,14 +160,12 @@ const Auth = () => {
                           <span>Student</span>
                         </div>
                       </SelectItem>
-
                       <SelectItem value="teacher">
                         <div className="flex items-center gap-2">
                           {getRoleIcon('teacher')}
                           <span>Teacher</span>
                         </div>
                       </SelectItem>
-
                       <SelectItem value="admin">
                         <div className="flex items-center gap-2">
                           {getRoleIcon('admin')}
