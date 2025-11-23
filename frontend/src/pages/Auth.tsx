@@ -30,7 +30,7 @@ const Auth = () => {
     try {
       if (isLogin) {
         // LOGIN
-        const res = await api.post(${API_BASE}/auth/login, {
+        const res = await api.post(`${API_BASE}/auth/login`, {
           email,
           password,
         });
@@ -47,10 +47,10 @@ const Auth = () => {
           description: 'You have successfully logged in.',
         });
 
-        navigate('/dashboard'); // ✅ NOW THIS WORKS
+        navigate('/'); // ✅ NOW THIS WORKS
       } else {
         // REGISTER
-        const res = await api.post(${API_BASE}/auth/register, {
+        const res = await api.post(`${API_BASE}/auth/register`, {
           fullName,
           email,
           password,
