@@ -43,14 +43,22 @@ const Dashboard = () => {
 
       default:
         return (
-        <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-          {/* Spinner Loader */}
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
+       
+          <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+  {/* Spinner Loader */}
+  <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
 
-        <p className="text-lg font-medium text-muted-foreground">
-  Still loading… this may take a moment. You can refresh the page if it takes too long.
-</p>
-        </div>
+  <p className="text-lg font-medium text-muted-foreground text-center px-4">
+    Still loading… this may take a moment. You can refresh the page if it takes too long.
+  </p>
+
+  <Button
+    onClick={() => window.location.href = "/"}
+    className="mt-2"
+  >
+    Dashboard
+  </Button>
+</div>
       );
     }
   }
