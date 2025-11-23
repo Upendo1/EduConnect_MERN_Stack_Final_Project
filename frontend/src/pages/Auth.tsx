@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { GraduationCap, BookOpen, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-
+const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/api";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { toast } = useToast();
@@ -30,7 +30,7 @@ const Auth = () => {
     try {
       if (isLogin) {
         // LOGIN
-        const res = await api.post('/auth/login', {
+        const res = await api.post(${API_BASE}/auth/login, {
           email,
           password,
         });
@@ -50,7 +50,7 @@ const Auth = () => {
         navigate('/'); // ✅ NOW THIS WORKS
       } else {
         // REGISTER
-        const res = await api.post('/auth/register', {
+        const res = await api.post(${API_BASE}/auth/register, {
           fullName,
           email,
           password,

@@ -20,7 +20,7 @@ const adminRoutes=require("./routes/adminRoutes");
 const app = express();
 app.use(cors());
 app.use(cors({
-  origin: "https://edu-connect-snowy.vercel.app/",
+  origin: "https://edu-connect-snowy.vercel.app",
   credentials: true
 }));
 app.use(bodyParser.json({ limit: '10mb' }));

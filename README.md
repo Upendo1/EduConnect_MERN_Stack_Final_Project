@@ -13,6 +13,7 @@ EduConnect is a full-stack web application designed to connect students and educ
 - Resource browsing, preview, and download functionality
 - Teacher dashboard for uploading and managing resources
 - Student dashboard for accessing and downloading resources
+- Administrator dashborard for overseeing all activities within the system
 - Role-based access control and protected routes
 
 ---
@@ -76,7 +77,7 @@ npm install express mongoose dotenv bcryptjs jsonwebtoken cors multer cloudinary
 ```
 ## Deployment
 
-## Frontend (Netlify/Vercel)
+## Frontend (Vercel)
 
 Build command: npm run build
 
