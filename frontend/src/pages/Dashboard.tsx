@@ -43,11 +43,14 @@ const Dashboard = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
 
             <p className="text-lg font-medium text-muted-foreground">
-              Unknown role detected… you can return to the homepage.
+               Taking too long? You can go back to homepage.
             </p>
 
             <Button
-              onClick={() => navigate("/")} // SPA navigation
+              onClick={() => {
+                // SPA-safe navigation
+                navigate("/");
+              }}
               className="mt-2"
             >
               Go to Homepage
@@ -57,7 +60,7 @@ const Dashboard = () => {
     }
   }
 
-  // If somehow user is null after loading, show homepage button
+  // Safety fallback
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
@@ -66,11 +69,8 @@ const Dashboard = () => {
         Still loading… you can return to the homepage.
       </p>
 
-      <Button
-        onClick={() => navigate("/")}
-        className="mt-2"
-      >
-        Go to Dashboard
+      <Button onClick={() => navigate("/")} className="mt-2">
+        Go to Homepage
       </Button>
     </div>
   );
