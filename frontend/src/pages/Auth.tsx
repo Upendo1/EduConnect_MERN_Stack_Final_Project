@@ -49,7 +49,7 @@ const Auth = () => {
           description: 'You have successfully logged in.',
         });
 
-        navigate('/');
+        navigate('/dashboard');
       } else {
         // REGISTER
         const res = await api.post(`${API_BASE}/auth/register`, {
