@@ -9,13 +9,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { GraduationCap, BookOpen, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+
 const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/api";
+
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const { setUser } = useAuth(); // ✅ ADD THIS
+  const { setUser } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +32,7 @@ const Auth = () => {
     try {
       if (isLogin) {
         // LOGIN
-        const res = await api.post(${API_BASE}/auth/login, {
+        const res = await api.post(`${API_BASE}/auth/login`, {
           email,
           password,
         });
@@ -40,17 +42,17 @@ const Auth = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
 
-        setUser(user); // ✅ CRITICAL FIX
+        setUser(user);
 
         toast({
           title: 'Welcome back!',
           description: 'You have successfully logged in.',
         });
 
-        navigate('/'); // ✅ NOW THIS WORKS
+        navigate('/');
       } else {
         // REGISTER
-        const res = await api.post(${API_BASE}/auth/register, {
+        const res = await api.post(`${API_BASE}/auth/register`, {
           fullName,
           email,
           password,
@@ -62,14 +64,14 @@ const Auth = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
 
-        setUser(user); // ✅ CRITICAL FIX
+        setUser(user);
 
         toast({
           title: 'Account created!',
           description: 'Your account has been created.',
         });
 
-        navigate('/'); // redirect after register
+        navigate('/');
       }
     } catch (err: any) {
       toast({
@@ -145,12 +147,14 @@ const Auth = () => {
                           <span>Student</span>
                         </div>
                       </SelectItem>
+
                       <SelectItem value="teacher">
                         <div className="flex items-center gap-2">
                           {getRoleIcon('teacher')}
                           <span>Teacher</span>
                         </div>
                       </SelectItem>
+
                       <SelectItem value="admin">
                         <div className="flex items-center gap-2">
                           {getRoleIcon('admin')}
