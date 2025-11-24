@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
     // Hash password
     const hashed = await bcrypt.hash(password, 10);
 
-    // Create user with role
+    // Create user
     const user = new User({
       email,
       password: hashed,
@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    // Generate token with role included
+    // Generate token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -51,11 +51,12 @@ exports.register = async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
-        name: user.name,
+        fullName: user.fullName, // FIXED
         role: user.role,
         avatarUrl: user.avatarUrl,
       },
     });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -63,15 +64,42 @@ exports.register = async (req, res) => {
 
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
-  const user = await User.findOne({ email });
-  if (!user || !user.password) return res.status(400).json({ message: 'Invalid credentials' });
-  const ok = await bcrypt.compare(password, user.password);
-  if (!ok) return res.status(400).json({ message: 'Invalid credentials' });
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
-  res.json({ token, user: { id:user._id, email:user.email, name:user.name, avatarUrl:user.avatarUrl } });
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password)
+      return res.status(400).json({ message: "Email and password required" });
+
+    const user = await User.findOne({ email });
+
+    if (!user || !user.password)
+      return res.status(400).json({ message: "Invalid credentials" });
+
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(400).json({ message: "Invalid credentials" });
+
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        fullName: user.fullName, // FIXED
+        role: user.role,
+        avatarUrl: user.avatarUrl,
+      },
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
+
 
 exports.me = async (req, res) => {
   res.json({ user: req.user });
