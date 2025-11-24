@@ -35,8 +35,8 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const res = await fetch(${API_BASE}/auth/me, {
-        headers: { Authorization: Bearer ${token} },
+      const res = await fetch(`${API_BASE}/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) return;
@@ -66,8 +66,8 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL
       }
 
       try {
-        const res = await fetch(${API_BASE}/auth/me, {
-          headers: { Authorization: Bearer ${token} },
+        const res = await fetch(`${API_BASE}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (res.ok) {
