@@ -65,7 +65,7 @@ const Dashboard = () => {
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
 
       <p className="text-lg font-medium text-muted-foreground">
-        Still loading… you can return to the homepage.
+      Taking longer than expected… please try reloading
       </p>
 
       <Button onClick={() => navigate("/")} className="mt-2">
