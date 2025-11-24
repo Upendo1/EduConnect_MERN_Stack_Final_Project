@@ -11,14 +11,18 @@ const Dashboard = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if not logged in
+  /**
+   * Redirect unauthenticated users
+   */
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/auth");
+      navigate("/auth", { replace: true });
     }
   }, [user, loading, navigate]);
 
-  // Global loading
+  /**
+   * Global spinner for auth loading
+   */
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -27,40 +31,35 @@ const Dashboard = () => {
     );
   }
 
-  // If user exists, render role-specific dashboard
-  if (user) {
-    switch (user.role.toLowerCase()) {
-      case "student":
-        return <StudentDashboard />;
-      case "teacher":
-        return <TeacherDashboard />;
-      case "admin":
-        return <AdminDashboard />;
-      default:
-        // Unknown role fallback
-        return (
-          <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
+  /**
+   * Render dashboards for authenticated users
+   */
+  if (user && user.role) {
+    const role = user.role.toLowerCase();
 
-            <p className="text-lg font-medium text-muted-foreground">
-               Taking too long? You can go back to homepage.
-            </p>
+    if (role === "student") return <StudentDashboard />;
+    if (role === "teacher") return <TeacherDashboard />;
+    if (role === "admin") return <AdminDashboard />;
 
-            <Button
-              onClick={() => {
-                // SPA-safe navigation
-                navigate("/");
-              }}
-              className="mt-2"
-            >
-              Go to Homepage
-            </Button>
-          </div>
-        );
-    }
+    // Unknown role
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
+
+        <p className="text-lg font-medium text-muted-foreground">
+          Unknown role detected. You can return to the homepage.
+        </p>
+
+        <Button onClick={() => navigate("/")} className="mt-2">
+          Go to Homepage
+        </Button>
+      </div>
+    );
   }
 
-  // Safety fallback
+  /**
+   * Safety fallback — should rarely trigger
+   */
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
