@@ -49,10 +49,6 @@ const Dashboard = () => {
         <p className="text-lg font-medium text-muted-foreground">
           Unknown role detected. You can return to the homepage.
         </p>
-
-        <Button onClick={() => navigate("/")} className="mt-2">
-          Go to Homepage
-        </Button>
       </div>
     );
   }
@@ -65,12 +61,8 @@ const Dashboard = () => {
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-primary"></div>
 
       <p className="text-lg font-medium text-muted-foreground">
-      Taking longer than expected… please try reloading
+        Taking longer than expected… please try reloading.
       </p>
-
-      <Button onClick={() => navigate("/")} className="mt-2">
-        Go to Homepage
-      </Button>
     </div>
   );
 };
