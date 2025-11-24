@@ -26,59 +26,71 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+const API_BASE = import.meta.env.VITE_API_BASE_URL
+  // const API_BASE = "https://educonnect-mern-stack-final-project.onrender.com/api";
 
-  const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-  /**
-   * 🌐 Fetch logged-in user
-   * Ensures loading is handled correctly
-   */
+  // 📌 Fetch logged-in user from backend
   const fetchUser = async () => {
-    setLoading(true); // important fix
-
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
+      if (!token) return;
 
-      const res = await fetch(`${API_BASE}/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await fetch(${API_BASE}/auth/me, {
+        headers: { Authorization: Bearer ${token} },
       });
 
-      if (!res.ok) {
-        localStorage.removeItem("token");
-        setUser(null);
-        setLoading(false);
-        return;
-      }
+      if (!res.ok) return;
 
       const data = await res.json();
 
       if (data.user && data.user.role) {
         setUser(data.user);
-      } else {
-        setUser(null); // invalid shape
       }
     } catch (err) {
       console.error("Fetch user error:", err);
-      setUser(null);
     }
-
-    setLoading(false);
   };
 
   const refreshUser = async () => {
     await fetchUser();
   };
 
-  /**
-   * 🔥 Restore user session once on page load
-   */
+  // 🔥 Stable session restore on app load
   useEffect(() => {
-    fetchUser(); // use the repaired unified method
+    const init = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(${API_BASE}/auth/me, {
+          headers: { Authorization: Bearer ${token} },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user?.role) {
+            setUser(data.user);
+          } else {
+            setUser(null);
+          }
+        } else {
+          // invalid token → clear and force logout
+          localStorage.removeItem("token");
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("Auto login failed:", err);
+        setUser(null);
+      }
+
+      setLoading(false);
+    };
+
+    init();
   }, []);
 
   const signOut = async () => {
