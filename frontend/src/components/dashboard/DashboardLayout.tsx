@@ -11,9 +11,9 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
-  const { profile, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
-
+console.log(user)
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
@@ -38,7 +38,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
             </div>
             <div>
               <h1 className="text-xl font-bold text-foreground">EduConnect</h1>
-              <p className="text-xs text-muted-foreground capitalize">{profile?.role} Portal</p>
+              <p className="text-xs text-muted-foreground capitalize">{user?.role} Portal</p>
             </div>
           </div>
 
@@ -46,12 +46,12 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
             <div className="flex items-center gap-3">
               <Avatar>
                 <AvatarFallback className="bg-primary text-primary-foreground">
-                  {profile?.full_name ? getInitials(profile.full_name) : 'U'}
+                  {user?.email ? getInitials(user.email) : 'U'}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden sm:block">
-                <p className="text-sm font-medium">{profile?.full_name}</p>
-                <p className="text-xs text-muted-foreground">{profile?.role}</p>
+                <p className="text-sm font-medium">{user?.email}</p>
+                <p className="text-xs text-muted-foreground">{user?.role}</p>
               </div>
             </div>
 
