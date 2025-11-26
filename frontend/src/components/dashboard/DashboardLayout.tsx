@@ -13,7 +13,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-console.log(user)
+// console.log(user)
   const handleSignOut = async () => {
     await signOut();
     navigate('/');

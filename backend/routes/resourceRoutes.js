@@ -36,5 +36,5 @@ router.post("/:id/view", trackView);
 
 // Track download
 router.post("/:id/download", trackDownload);
-
+router.get("/:id/view", viewResourceFile);
 module.exports = router;

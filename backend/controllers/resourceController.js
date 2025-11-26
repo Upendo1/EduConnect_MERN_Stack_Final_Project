@@ -156,3 +156,20 @@ exports.trackDownload = async (req, res) => {
     res.status(500).json({ error: "Failed to track download" });
   }
 };
+
+exports.viewResourceFile = async (req, res) => {
+  try {
+    const resource = await Resource.findById(req.params.id);
+
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" });
+    }
+
+    const filePath = path.resolve(resource.file_url);
+
+    return res.sendFile(filePath);
+  } catch (error) {
+    console.error("View Resource File Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

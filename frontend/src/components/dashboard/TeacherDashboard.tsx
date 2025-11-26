@@ -72,6 +72,7 @@ const TeacherDashboard = () => {
     try {
       const res = await fetch(`${API_BASE}/resources`);
       const data = await res.json();
+      // console.log(data)
       setResources(data);
     } catch (err) {
       console.error("Error fetching resources:", err);
@@ -81,15 +82,35 @@ const TeacherDashboard = () => {
   // ---------------------------
   // Fetch Analytics
   // ---------------------------
-  const fetchAnalytics = async () => {
-    try {
-      const res = await fetch(`${API_BASE}/resources/analytics`);
-      const data = await res.json();
-      setAnalyticsData(data);
-    } catch (err) {
-      console.error("Error fetching analytics:", err);
-    }
-  };
+  // const fetchAnalytics = async () => {
+  //   try {
+  //     const res = await fetch(`${API_BASE}/resources/analytics`);
+  //     const data = await res.json();
+  //     setAnalyticsData(data);
+  //     // console.log(data)
+  //   } catch (err) {
+  //     console.error("Error fetching analytics:", err);
+  //   }
+  // };
+const fetchAnalytics = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/resources/analytics`);
+    const data = await res.json();
+
+    // Convert object → array for Recharts
+    const chartData = [
+      {
+        name: "Totals",
+        views: data.totalViews || 0,
+        downloads: data.totalDownloads || 0,
+      }
+    ];
+
+    setAnalyticsData(chartData);
+  } catch (err) {
+    console.error("Error fetching analytics:", err);
+  }
+};
 
   // ---------------------------
   // Upload Resource (Express)
@@ -221,7 +242,7 @@ const TeacherDashboard = () => {
       </div>
 
       {/* Analytics */}
-      <Card className="shadow-card mt-6">
+      {/* <Card className="shadow-card mt-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart className="h-5 w-5" /> Resource Analytics
@@ -240,7 +261,29 @@ const TeacherDashboard = () => {
             </RechartsBarChart>
           </ResponsiveContainer>
         </CardContent>
-      </Card>
+      </Card> */}
+      <Card className="shadow-card mt-6">
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <BarChart className="h-5 w-5" /> Resource Analytics
+    </CardTitle>
+  </CardHeader>
+
+  <CardContent>
+    <ResponsiveContainer width="100%" height={300}>
+  <RechartsBarChart data={analyticsData}>
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="name" />
+    <YAxis />
+    <Tooltip />
+    <Legend />
+    <Bar dataKey="views" fill="#4f46e5" />        {/* Indigo */}
+    <Bar dataKey="downloads" fill="#10b981" />   {/* Emerald */}
+  </RechartsBarChart>
+</ResponsiveContainer>
+  </CardContent>
+</Card>
+
 
       {/* Resources list + upload */}
       <Card className="shadow-card mt-6">
