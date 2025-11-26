@@ -242,8 +242,8 @@ const AdminDashboard = () => {
         </div>
 
         {/* CATEGORY PIE CHART */}
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card className="shadow-card">
+        <div className="grid gap-4 md:grid-cols-1">
+          {/* <Card className="shadow-card">
             <CardHeader>
               <CardTitle>Resources by Category</CardTitle>
               <CardDescription>Distribution of resources across categories</CardDescription>
@@ -269,7 +269,7 @@ const AdminDashboard = () => {
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* RECENT RESOURCES BAR CHART */}
           <Card className="shadow-card">
