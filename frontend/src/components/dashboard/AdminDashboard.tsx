@@ -98,9 +98,9 @@ const AdminDashboard = () => {
           const res = await fetch(${API_BASE}/resources/byCategory/${category._id}, {
             headers: { Authorization: Bearer ${token} },
           });
-          console.log(res.length)
-          const { count } = (await res.json()).length;
-          console.log({count})
+          // console.log(res.length)
+          const { count } = await res.json();
+          // console.log({count})
           return {
             name: category.name,
             value: count || 0,
