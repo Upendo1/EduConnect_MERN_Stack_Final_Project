@@ -84,7 +84,7 @@ Build command: npm run build
 Publish directory: dist
 
 
-https://edu-connect-snowy.vercel.app/
+https://edu-connect-snowy.vercel.app
 
 
 ## Backend (Render)
