@@ -70,8 +70,8 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(${API_BASE}/admin/stats, {
-        headers: { Authorization: Bearer ${token} },
+      const res = await fetch(`${API_BASE}/admin/stats`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
@@ -87,20 +87,20 @@ const AdminDashboard = () => {
   const fetchCategoryData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(${API_BASE}/categories, {
-        headers: { Authorization: Bearer ${token} },
+      const res = await fetch(`${API_BASE}/categories`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const categories = await res.json();
 
       const categoryStats = await Promise.all(
         categories.map(async (category: any) => {
-          const res = await fetch(${API_BASE}/resources/byCategory/${category._id}, {
-            headers: { Authorization: Bearer ${token} },
+          const res = await fetch(`${API_BASE}/resources/byCategory/${category._id}`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
-          // console.log(res.length)
+
           const { count } = await res.json();
-          // console.log({count})
+
           return {
             name: category.name,
             value: count || 0,
@@ -109,7 +109,6 @@ const AdminDashboard = () => {
       );
 
       setCategoryData(categoryStats);
-      // console.log(categoryStats)
     } catch (error) {
       console.error("Error fetching category data:", error);
     }
@@ -121,14 +120,14 @@ const AdminDashboard = () => {
   const fetchActivityData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(${API_BASE}/resources/recent, {
-        headers: { Authorization: Bearer ${token} },
+      const res = await fetch(`${API_BASE}/resources/recent`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const resources = await res.json();
 
       const activity = resources.map((resource: any) => ({
-        name: resource.title.length > 15 ? ${resource.title.slice(0, 15)}... : resource.title,
+        name: resource.title.length > 15 ? `${resource.title.slice(0, 15)}...` : resource.title,
         views: resource.views || 0,
         downloads: resource.downloads || 0,
       }));
@@ -148,11 +147,11 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(${API_BASE}/categories, {
+      const res = await fetch(`${API_BASE}/categories`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: Bearer ${token},
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: categoryName,
@@ -243,39 +242,34 @@ const AdminDashboard = () => {
         </div>
 
         {/* CATEGORY PIE CHART */}
-        <div className="grid gap-4 md:grid-cols-1">
-          {/* <Card className="shadow-sm">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card className="shadow-card">
             <CardHeader>
               <CardTitle>Resources by Category</CardTitle>
               <CardDescription>Distribution of resources across categories</CardDescription>
             </CardHeader>
-
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={categoryData || []}
+                    data={categoryData}
                     cx="50%"
                     cy="50%"
-                    outerRadius={85}
-                    dataKey="value"
                     labelLine={false}
-                    label={({ name }) => name}
+                    label={(entry) => entry.name}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
                   >
-                    {(categoryData || []).map((entry, index) => (
-                      <Cell
-                        key={cell-${index}}
-                        fill={COLORS[index % COLORS.length]}
-                      />
+                    {categoryData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
-          </Card> */}
-
+          </Card>
 
           {/* RECENT RESOURCES BAR CHART */}
           <Card className="shadow-card">
