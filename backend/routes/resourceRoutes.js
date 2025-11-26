@@ -10,7 +10,8 @@ const {
   getRecentResources,
   getResourcesByCategory,
   trackView,
-  trackDownload
+  trackDownload,
+  viewResourceFile
 } = require("../controllers/resourceController");
 
 // Get ALL resources
