@@ -87,7 +87,7 @@ Publish directory: dist
 https://edu-connect-snowy.vercel.app/
 
 
-## Backend (Render/Railway/Heroku)
+## Backend (Render)
 
 Set environment variables from .env
 
