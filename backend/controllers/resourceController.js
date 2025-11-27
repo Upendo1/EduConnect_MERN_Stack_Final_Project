@@ -157,15 +157,36 @@ exports.trackDownload = async (req, res) => {
   }
 };
 
+// exports.viewResourceFile = async (req, res) => {
+//   try {
+//     const resource = await Resource.findById(req.params.id);
+
+//     if (!resource) {
+//       return res.status(404).json({ message: "Resource not found" });
+//     }
+
+//     const filePath = path.resolve(resource.file_url);
+
+//     return res.sendFile(filePath);
+//   } catch (error) {
+//     console.error("View Resource File Error:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 exports.viewResourceFile = async (req, res) => {
   try {
+    console.log("VIEW FILE ID:", req.params.id);
+
     const resource = await Resource.findById(req.params.id);
 
     if (!resource) {
       return res.status(404).json({ message: "Resource not found" });
     }
 
-    const filePath = path.resolve(resource.file_url);
+    // ensure backend directory is used
+    const filePath = path.join(__dirname, "..", resource.file_url);
+
+    // console.log("SERVING FILE:", filePath);
 
     return res.sendFile(filePath);
   } catch (error) {
