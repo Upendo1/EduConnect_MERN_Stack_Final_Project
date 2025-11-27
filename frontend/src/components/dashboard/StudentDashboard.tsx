@@ -111,7 +111,7 @@ const StudentDashboard = () => {
   const handleView = async (resource) => {
     await trackView(resource._id); // ✅ FIXED
     console.log(resource.file_ur)
-    window.open("https://educonnect-mern-stack-final-project.onrender.com/uploads/"+resource.file_url, '_blank')
+    window.open("https://educonnect-mern-stack-final-project.onrender.com/"+resource.file_url, '_blank')
     window.open(resource.file_url, '_blank');
   };
 
