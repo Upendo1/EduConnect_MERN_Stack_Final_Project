@@ -49,6 +49,7 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/upload', uploadRoutes);
+// app.use('/api/uploads', uploadRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/resources", resourceRoutes);
 app.use('/api/admin', adminRoutes);
